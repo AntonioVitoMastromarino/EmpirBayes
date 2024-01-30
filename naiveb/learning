@@ -1,0 +1,12 @@
+import numpy as np
+
+def minimize(val,gra,guess,tol=1/16,max=16):
+  gradi=gra(guess)
+  argument=guess-gradi
+  gradient=gra(argument)
+  adapt=[(gradi,gradi-gradient)]
+  gap=tol+1
+  while(gap>tol):
+    tem=np.array([y*(x@gradients[-1]) for (x,y) in adapt]).sum()
+    new=gradients[-1]-np.array([x*(x@gradients[-1]) for (x,y) in adapt])
+    arg=arguments[-1]-tem-new
