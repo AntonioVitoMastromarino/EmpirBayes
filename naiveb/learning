@@ -4,7 +4,8 @@ def minimize(val,gra,guess,tol=1/16,max=16):
   gradi=gra(guess)
   argument=guess-gradi
   gradient=gra(argument)
-  adapt=[(gradi,gradi-gradient)]
+  norm=np.linalg.norm(gradi)
+  adapt=[(gradi/norm,(gradi-gradient)/norm)]
   gap=tol+1
   while(gap>tol):
     tem=np.array([y*(x@gradients[-1]) for (x,y) in adapt]).sum()
