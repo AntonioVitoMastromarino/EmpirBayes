@@ -17,7 +17,7 @@ def cluster(n:int,N:int,conditional,sample,prior=1,tol=1,maxiter=16):
     iter+=1
   return posterior
 
-def calibration(n:int,N:int,conditional,gradient,sample,guess,prior=1,tol=1,maxiter=16,lear=1):
+def calibration(n:int,N:int,conditional,gradient,sample,guess,prior=1,tol=1,maxiter=16,learn=1):
   #conditional(x,parameters),prior are normalized arrays of n probabilities
   #gradient(x,parameters) is an array of n parameters
   #smaple is an array of N samples
