@@ -1,0 +1,20 @@
+Metadata-Version: 2.1
+Name: naiveb
+Version: 0.0.0
+Summary: Implementation of Naive Bayes Classifier methods.
+Home-page: https://github.com/AntonioVitoMastromarino/NaiveB
+Author: Antonio Mastromarino
+Author-email: antonio.mastromarino@wolfson.ox.ac.uk
+Maintainer: Antonio Mastromarino
+Maintainer-email: antonio.mastromarino@wolfson.ox.ac.uk
+License: MIT License
+Requires-Dist: numpy
+Requires-Dist: matplotlib
+Requires-Dist: pandas
+Requires-Dist: scipy
+Provides-Extra: docs
+Requires-Dist: sphinx; extra == "docs"
+Requires-Dist: sphinx_rtd_theme; extra == "docs"
+
+# NaiveB
+Implementation of Naive Bayes Classifier methods.
