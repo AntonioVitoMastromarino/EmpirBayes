@@ -4,9 +4,38 @@ from naiveb.linear import Linear
 
 class Minimize:
 
+  '''
+  Class to minimize a function using Newton Tangent or Gradient Descend method:
+    attributes:
+      dim
+      guess
+      func
+      grad
+      hess
+      x_gap
+      y_gap
+
+    methods:
+      __init__
+      n_step
+      d_step
+      step
+      validation
+      __call__
+      
+    to do list:
+      consider different stopping criteria to swich methods adaptively
+      allow user setting of arbitrary parameters in the initialization
+      make either the method less arbitrary or the usage more flexible
+
+  '''
+
 
   def __init__(self, dim, func, grad = None, hess = None, guess = 0):
   
+    self.x_gap = None
+    self.y_gap = None
+
     self.dim = dim
     self.func = func
 
@@ -48,8 +77,8 @@ class Minimize:
         x, y = self.hess(gradient)
         newton_step = y + np.linalg.norm(x)*np.random.randn(self.dim)/self.dim
 
+    old_func = self.func(self.guess)
     if self.func(self.guess - newton_step) < old_func:
-      old_func = self.func(self.guess)
       self.guess -= newton_step
       if not self.grad_available:
         self.grad+(newton_step,old_func-self.func(self.guess))
@@ -57,13 +86,13 @@ class Minimize:
           try:
             self.hess + (gradient - self.grad.matrix, newton_step)
           except:
-            rand = np.random.randn(self.dim)/self.dim
+            rand = np.random.randn(self.dim) / self.dim
             x, y = self.grad(rand)
             self.hess + (gradient - y*(rand-x) + np.linalg.norm(x)*np.random.randn(self.dim)/self.dim, newton_step)
       elif not self.hess_available:
-        self.hess+(gradient-self.grad(self.guess), newton_step)
+        self.hess + (gradient - self.grad(self.guess), newton_step)
     else:
-      raise Exception('Newton got stuck')
+      raise Exception('Newton got stuck: ' + str(self.guess) + ' ' + str(self.guess - newton_step))
 
 
   def d_step(self, learn_rate, randn_rate):
@@ -79,8 +108,8 @@ class Minimize:
         gradient = y * (rand - x) + x
     gra_descend = gradient * learn_rate + np.random.randn(self.dim)/self.dim * randn_rate
 
+    old_func = self.func(self.guess)
     if self.func(self.guess - gra_descend) < old_func:
-      old_func = self.func(self.guess)
       self.guess -= gra_descend
       if not self.grad_available:
         self.grad+(gra_descend,old_func-self.func(self.guess - gra_descend))
@@ -94,13 +123,13 @@ class Minimize:
       elif not self.hess_available:
         self.hess+(gradient-self.grad(self.guess - gra_descend), gra_descend)
     else:
-      raise Exception('Descend got stuck')
+      raise Exception('Descend got stuck: ' + str(self.guess) + ' ' + str(self.guess - gra_descend))
 
 
   def step(self, rate, max_succ, max_fail, max_iter):
     
-    c = np.cos(np.pi/(2 * self.dim))
-    s = np.sin(np.pi/(2 * self.dim))
+    c = np.cos(np.pi/(2 * (max_iter - self.iter - max_fail - max_succ)))
+    s = np.sin(np.pi/(2 * (max_iter - self.iter - max_fail - max_succ)))
     learn_rate = rate
     randn_rate = 0
     succ = 0
@@ -126,32 +155,50 @@ class Minimize:
 
     self.iter += 1
     try:
+      old_guess = self.guess
       old_func = self.func(self.guess)
       self.n_step()
-      self.gap = old_func - self.func(self.guess)
+      self.x_gap = np.linalg.norm(old_guess - self.guess)
+      self.y_gap = old_func - self.func(self.guess)
     except:
       if (fail == max_fail):
-        self.gap = 0
+        self.x_gap = 0
+        self.y_gap = 0
       elif (succ == max_succ):
-        self.gap = None
+        self.x_gap = None
+        self.y_gap = None
       else:
-        self.gap = None  
+        self.x_gap = None  
+        self.y_gap = None  
         return c
-    
-  def __call__(self, max_toll, max_iter):
+
+  def validation(self, x_toll, y_toll, num_iter):
+    for k in range(num_iter):
+      assert self.func(self.guess) < y_toll + self.func(self.guess + x_toll * np.random.randn(self.dim)/self.dim)
+
+  def __call__(self, x_toll, y_toll, max_iter):
     self.iter = 0
-    rate = max_toll
-    c = self.step(rate, 6, 6, 3 * self.dim)
+    rate = x_toll
+    c = self.step(rate, 3, 3, 12)
     while(self.iter < max_iter):
-      if self.gap is None:
+      if self.x_gap is None and self.y_gap in None:
         if c is None:
           rate = 2 * rate
         else:
           rate = c * rate
-        c = self.step(rate, 6, 6, self.iter + 3 * self.dim)
-      elif(self.gap < max_toll):
+        c = self.step(rate, 3, 3, self.iter + 12)
+      elif(self.y_gap < y_toll and self.x_gap < x_toll):
         return self.guess
       else:
-        self.n_step()
         self.iter += 1
+        try:
+          old_guess = self.guess
+          old_func = self.func(self.guess)
+          self.n_step()
+          self.x_gap = np.linalg.norm(old_guess - self.guess)
+          self.y_gap = old_func - self.func(self.guess)
+        except:
+          self.x_gap = None
+          self.y_gap = None
+      self.validation(x_toll, y_toll, max_iter)
     return self.guess
