@@ -1,4 +1,3 @@
-from .calibration import calibration
-from .cluster import cluster
+from .cluster import Cluster
 from .minimize import Minimize
 from .linear import Linear

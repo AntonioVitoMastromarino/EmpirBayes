@@ -12,8 +12,8 @@ class Minimize:
       func
       grad
       hess
-      x_gap
-      y_gap
+      guess
+      update
 
     methods:
       __init__
@@ -31,7 +31,7 @@ class Minimize:
   '''
 
 
-  def __init__(self, dim, func, grad = None, hess = None, guess = 0):
+  def __init__(self, dim, func, grad = None, hess = None, guess = 0, update = None):
   
     self.x_gap = None
     self.y_gap = None
@@ -201,4 +201,7 @@ class Minimize:
           self.x_gap = None
           self.y_gap = None
       self.validation(x_toll, y_toll, max_iter)
-    return self.guess
+    if self.update is None:
+      return self.guess
+    else:
+      self.update(self.guess)
