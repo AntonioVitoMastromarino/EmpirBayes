@@ -3,6 +3,25 @@ import numpy as np
 
 class Linear:
 
+  '''
+  Class to approximate a linear map learning the inputs with rank 1 corrections
+  -----------------------------------------------------------------------------
+
+    attributes:
+
+      dim: dimensions of the inputs of the map.
+      inputs: the list of all the given inputs.
+      output: the list of all the given output.
+      matrix: when possible rapresents the map.
+
+    methods:
+
+      __init__: initialize the attributes.
+      __call__: approximates map on input.
+      __add__: updates inputs and outputs.
+  
+  '''
+
 
   def __init__(self, dim):
     self.dim=dim

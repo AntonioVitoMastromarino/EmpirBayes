@@ -2,28 +2,24 @@ from ast import arg
 import numpy as np
 from naiveb.linear import Linear
 from naiveb.minimize import Minimize
-from sys import argv
 
 class Test_Minimize:
 
-  def test(x_toll, y_toll, max_iter):
+  def test():
 
-    func = lambda x: x * np.log(x)
-    grad = lambda x: np.log(x) + 1
-    hess = lambda x: x
+    func = lambda x: x[0] * np.log(x[0]) + x[0] * x[1]**2
+    grad = lambda x: np.array([np.log(x[0]) + 1 + x[1]**2, 2 * x[0] * x[1]])
+    hess = lambda x: np.array([[2 * x[0], - 2 * x[1]],[- 2 * x[1], 1 / x[0]]]) / (2 - 4 * x[1]**2)
 
-    tester = Minimize(1, func, grad = grad, hess = hess, guess = np.array([1.0]) )
-    tester(x_toll, y_toll, max_iter)
-    print('x_gap: ' + str(tester.x_gap),
-          'y_gap: ' + str(tester.y_gap),
-          'guess: ' + str(tester.guess),
+    tester = Minimize(1, func, grad = grad, hess = hess, guess = np.array([1.0, 1.0]) )
+    tester([1,1], [100,100,10], 0.001, 10)
+    print('guess: ' + str(tester.guess),
           'func: ' + str(tester.func(tester.guess)),
           'grad: ' + str(tester.grad(tester.guess)),
           'hess: ' + str(tester.hess(tester.guess)),
-          'iter: ' + str(tester.iter))
+          sep = '\n')
 
     #unit testing won't allow this !!!
 
 if (__name__ == '__main__'):
-  script_name, x_toll, y_toll, max_iter = argv
-  Test_Minimize.test(np.float64(x_toll), np.float64(y_toll), int(max_iter))
+  Test_Minimize.test()
