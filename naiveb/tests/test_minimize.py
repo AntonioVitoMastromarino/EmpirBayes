@@ -11,7 +11,7 @@ class Test_Minimize:
     grad = lambda x: np.array([np.log(x[0]) + 1 + x[1]**2, 2 * x[0] * x[1]])
     hess = lambda x: np.array([[2 * x[0], - 2 * x[1]],[- 2 * x[1], 1 / x[0]]]) / (2 - 4 * x[1]**2)
 
-    tester = Minimize(1, func, grad = grad, hess = hess, guess = np.array([1.0, 1.0]) )
+    tester = Minimize(1, func, grad = grad, hess = hess, guess = np.array([1.0, 1.0]), constrain = lambda x: x[0] > 0 )
     tester([1,1], [100,100,10], 0.001, 10)
     print('guess: ' + str(tester.guess),
           'func: ' + str(tester.func(tester.guess)),

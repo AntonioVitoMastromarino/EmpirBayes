@@ -15,6 +15,7 @@ class Minimize:
       func: the function to minimize.
       grad: the gradient of function.
       hess: the inverse hessian func.
+      constrain: ensure well defined.
       update: see in method __call__.
       grad_avail: True if grad known.
       hess_avail: True if hess known.
@@ -51,10 +52,9 @@ class Minimize:
   '''
 
 
-  def __init__(self, dim, func, grad = None, hess = None, guess = 0, update = None):
+  def __init__(self, dim, func, grad = None, hess = None, guess = 0, constrain = lambda x: True, update = None):
   
-    self.x_gap = None
-    self.y_gap = None
+    assert constrain(guess)
 
     self.dim = dim
     self.func = func
@@ -74,8 +74,10 @@ class Minimize:
       self.hess_avail = True
 
     self.guess = guess
+    self.constrain = constrain
     self.update = update
 
+    self.rate = 1
 
   def compute(self):
 
@@ -90,14 +92,17 @@ class Minimize:
         return y * (rand - x) + x
 
 
-  def attempt(self, step):
+  def attempt(self, step, called = None):
+
+    if not self.constrain(self.guess - step):
+      raise Exception('Out of boundaries')
 
     old_func = self.func(self.guess)
     old_grad = self.compute()
-    if self.func(self.guess + step) < old_func:
-      self.guess += step
+    if self.func(self.guess - step) < old_func:
+      self.guess -= step
       if not self.grad_avail:
-        self.grad + (step, old_func - self.func(self.guess))
+        self.grad + ( step, old_func - self.func(self.guess))
       if not self.hess_avail:
         self.hess + (old_grad - self.compute(), step)
     else:
@@ -110,21 +115,36 @@ class Minimize:
     gradient = self.compute()
 
     if self.hess_avail:
-      step = self.hess(self.guess)@gradient
+      step = self.hess(self.guess) @ gradient
     else:
       try:
         step = self.hess(gradient)
       except:
         x, y = self.hess(gradient)
-        step = y + np.linalg.norm(x)*np.random.randn(self.dim)/self.dim
+        step = y + np.linalg.norm(x) * np.random.randn(self.dim) / self.dim
 
-    self.attempt(step)
-
+    try:
+      self.attempt(step, called = 'nt')
+    except:
+      self.attempt(- step, called = 'nt')
 
   def gd_step(self, learn_rate, randn_rate):
 
-    self.attempt(self.compute() * learn_rate + np.random.randn(self.dim)/self.dim * randn_rate)
+    step = self.compute() * learn_rate + np.random.randn(self.dim) / self.dim * randn_rate
 
+    if randn_rate == 0:
+      called = 'gd'
+    elif learn_rate == 0:
+      called = 'rd'
+    else:
+      called = 'st'
+
+    try:
+      self.attempt(step, called = called)
+    except:
+      self.attempt(- step, called = called)
+      if called == 'gd':
+        print('backward accepted in gd')
 
   def __call__(self, rates, steps, toll, max_iter):
 
@@ -137,7 +157,7 @@ class Minimize:
       while (iter < steps[0]):
         iter += 1
         try:
-          self.d_step(0, rate)
+          self.gd_step(0, rate)
         except:
           rate -= rate0 / (steps[0] + 1)
       rate0 = rate * (steps[0] + 1)
@@ -147,18 +167,15 @@ class Minimize:
       while (iter < steps[1]):
         iter += 1
         try:
-          self.d_step(rate, 0)
+          self.gd_step(rate, 0)
+          rate += rate1 / (steps[1] + 1)    
         except:
           rate -= rate1 / (steps[1] + 1)
       rate1 = rate
-
-      iter = 0
-      while (np.linalg.norm(self.grad(self.guess)) > toll * (max_iter - k) and iter < steps[2] * k):
-        iter += 1
-        try:
-          self.n_step()
-        except:
-          iter = steps[2]
-
-      if (np.linalg.norm(self.grad(self.guess)) < toll):
+      try:
+        self.nt_step()
+      except:
+        pass
+      
+      if (np.linalg.norm(self.grad(self.guess)) < toll and self.update is not None):
         self.update(self.guess)

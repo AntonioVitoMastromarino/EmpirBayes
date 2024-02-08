@@ -41,7 +41,7 @@ class Linear:
   
   def __add__(self, xy):
     x, y = xy
-    if self.rec<self.dim:
+    if self.rec < self.dim:
       x_dep = np.array([(x @ u) * u for u in self.inputs]).sum()
       y_dep = np.array([(x @ u) * v for (u, v) in zip(self.inputs, self.output)]).sum()
       x_dep = x - x_dep
@@ -54,4 +54,6 @@ class Linear:
         if (self.rec == self.dim):
           self.matrix = np.array([np.tensordot(v, u) for (u, v) in zip(self.inputs, self.output)]).sum()
     else:
-      self.matrix+=np.tensordot(y - self(x), x)
+      y /= np.linalg.norm(x)
+      x /= np.linalg.norm(x)
+      self.matrix += np.tensordot(y - self(x), x)
