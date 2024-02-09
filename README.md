@@ -10,7 +10,7 @@ This class attempts to apply quasi-Newton methods to a maximum likelihood proble
 >
 >Here $n$ is the number of components of the mixture and $\{w_i: i = 1, \dots, n\}$ are the weights. The function to maximize is the logarithm of the likelihood of a series of independent observations $\{{\rm X}_k:k=1,\dots,{\rm N}\}$
 >
->$-\phi\left(\theta,\omega\right)$ $=$ $\log\left(\prod_{k=1,\dots,{\rm N}}\sum_{i=1,\dots,n}\omega_if\left({\rm X}_k,\theta_i\right)\right)$ $=$ $\sum_{k=1,\dots,{\rm N}}\log\left(\sum_{i=1,\dots,n}\omega_if\left({\rm X}_k,\theta_i\right)\right).$
+>$-\phi\left(\theta,\omega\right)=\log\left(\prod_{k=1,\dots,{\rm N}}\sum_{i=1,\dots,n}\omega_if\left({\rm X}\_k,\theta_i\right)\right)=\sum_{k=1,\dots,{\rm N}}\log\left(\sum_{i=1,\dots,n}\omega_if\left({\rm X}_k,\theta_i\right)\right).$
 >
 >>### Optimize the parameters 
 >>
