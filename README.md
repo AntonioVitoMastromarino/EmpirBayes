@@ -34,7 +34,11 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >>
 >>$\frac{\partial\phi}{\partial\omega\_i}=\sum\_{k=1,\dots,{\rm N}}\left(\sum\_{j=1,\dots,n}\omega\_jf\left({\rm X}\_k,\theta\_j\right)\right)^{-1}f\left({\rm X\_k},\theta\_i\right)$
 >>
->>so that
+>>so that, if
+>>
+>>${\mathbb P}\left(\theta_i\left|x,\omega\right.\right)\coloneqq\frac{f\left(x,\theta_i\right)\omega_i}{\sum_{j=1,\dots,n}f\left(x,\theta_j\right)\omega_j}
+>>
+>>then
 >>
 >>$\frac{1}{\omega\_i}\left<\theta\_i\left|{\rm X},\omega\right.\right>\coloneqq\frac{1}{\omega\_i{\rm N}}\sum\_{k=1,\dots{\rm N}}{\mathbb P}\left(\theta\_i\left|{\rm X}\_k,\omega\right.\right)=\frac{1}{\omega\_i\rm N}\sum\_{k=1,\dots,{\rm N}}f\left(\theta\_i,{\rm X}\_k,\omega\right)=\frac{1}{\rm N}\frac{\partial\phi}{\partial\omega\_i}$
 >>
