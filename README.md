@@ -55,7 +55,7 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >>- prior $=\omega^{\left(0\right)}$
 >>- theta $=\theta^{\left(0\right)}$
 >>- gap $=\left|\omega^{\left(n+1\right)}-\omega^{\left(n\right)}\right|$ has to be set when $\omega$ is updated.
->>- constrain $:\theta\rightarrow\left(f\left(x,\theta\right)>0\right)$ checks that the likelihood is non zero before computing the logarithm.
+>>- constrain $:\theta\rightarrow\left(f\left({\mathcal X},\theta\right)>0\right)$ checks that the likelihood is non zero before computing the logarithm.
 >>
 >>The methods of this class are:
 >>
