@@ -47,23 +47,23 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >>### Content of the module
 >>
 >>The module contains a class naiveb.cluster.Cluster which is initialized with:
->>- num $=n$
->>- dim $=d$ such that $\theta\in{\mathbb R}^d$
->>- func $=f:\mathcal X\times{\mathbb R}^d\rightarrow\left[0,\infty\right)$ such that $\mathrm X\_k:\Omega\rightarrow{\cal X}$
->>- grad $=\frac{\partial}{\partial\theta}f$
->>- hess $=\frac{\partial^2}{\partial\theta^2}f$
->>- prior $=\omega^{\left(0\right)}$
->>- theta $=\theta^{\left(0\right)}$
+>>- num $=n$.
+>>- dim $=d$ such that $\theta\in{\mathbb R}^d$.
+>>- func $=f:\mathcal X\times{\mathbb R}^d\rightarrow\left[0,\infty\right)$ such that $\mathrm X\_k:\Omega\rightarrow{\cal X}$.
+>>- grad $=\frac{\partial}{\partial\theta}f$.
+>>- hess $=\frac{\partial^2}{\partial\theta^2}f$.
+>>- prior $=\omega^{\left(0\right)}$.
+>>- theta $=\theta^{\left(0\right)}$.
 >>- gap $=\left|\omega^{\left(n+1\right)}-\omega^{\left(n\right)}\right|$ has to be set when $\omega$ is updated.
 >>- constrain $:\theta\rightarrow\left(f\left({\mathcal X},\theta\right)>0\right)$ checks that the likelihood is non-zero before computing the logarithm.
 >>
 >>The methods of this class are:
 >>
->>- log\_like: Computes $\phi$ from a sample $\{{\rm X}\_k:k=1,\dots,{\rm N}\}$
+>>- log\_like: Computes $\phi$ from a sample $\{{\rm X}\_k:k=1,\dots,{\rm N}\}$.
 >>
->>- grad\_log: Computes $\frac{\partial\phi}{\partial\theta}$ from a sample $\{{\rm X}\_k:k=1,\dots,{\rm N}\}$
+>>- grad\_log: Computes $\frac{\partial\phi}{\partial\theta}$ from a sample $\{{\rm X}\_k:k=1,\dots,{\rm N}\}$.
 >>
->>- inv\_hess: Computes the inverse matrix of $\frac{\partial^2\phi}{\partial\theta^2}$ from a sample $\{{\rm X}\_k:k=1,\dots,{\rm N}\}$
+>>- inv\_hess: Computes the inverse matrix of $\frac{\partial^2\phi}{\partial\theta^2}$ from a sample $\{{\rm X}\_k:k=1,\dots,{\rm N}\}$.
 >>
 >>- calibrator: Given a sample $\{{\rm X}\_k:k=1,\dots,{\rm N}\}$ return an object of the class naiveb.minimize.Minimize, when called this object tries to optimize $\theta$ eventually updating the weights.
 >>
@@ -151,21 +151,21 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >>### Content of the module
 >>
 >>The module contains a class naiveb.minimize.Minimize which is initialized with:
->>- dim $=d$ such that $\phi:\mathbb R^d\rightarrow\mathbb R$
->>- guess $=x^{\left(0\right)}$
->>- func $=\phi\left(x\right)$
->>- grad $=\nabla\phi\left(x\right)$
->>- hess $=\nabla^2\phi\left(x\right)^{-1}$
->>- constrain is equivalent to $\phi\left(x\right)<+\infty$
->>- update is called at the end of the method \_\_call\_\_
->>- grad\_avail: is True when grad is initialized. If False, grad is inferred with the class Linear (in development)
->>- hess\_avail: is True when hess is initialized. If False, hess is inferred with the class Linear (in development)
+>>- dim $=d$ such that $\phi:\mathbb R^d\rightarrow\mathbb R$.
+>>- guess $=x^{\left(0\right)}$.
+>>- func $=\phi\left(x\right)$.
+>>- grad $=\nabla\phi\left(x\right)$.
+>>- hess $=\nabla^2\phi\left(x\right)^{-1}$.
+>>- constrain is equivalent to $\phi\left(x\right)<+\infty$.
+>>- update is called at the end of the method \_\_call\_\_.
+>>- grad\_avail: is True when grad is initialized. If False, grad is inferred with the class Linear (in development).
+>>- hess\_avail: is True when hess is initialized. If False, hess is inferred with the class Linear (in development).
 >>
 >>The methods of this class are:
 >>
->>- compute: Takes no input. Just compute grad in guess. If grad is not initialized, then it inferres the gradient locally (in development)
+>>- compute: Takes no input. Just compute grad in guess. If grad is not initialized, then it inferres the gradient locally (in development).
 >>
->>- attempt: Given a step $x^{\left(n\right)}-x^{\left(n+1\right)}$ checks if the proposal can be accepted, in case replace guess. If grad is not initialized, then it updates grad (in development). If hess is not initialized, then it updates hess (in development)
+>>- attempt: Given a step $x^{\left(n\right)}-x^{\left(n+1\right)}$ checks if the proposal can be accepted, in case replace guess. If grad is not initialized, then it updates grad (in development). If hess is not initialized, then it updates hess (in development).
 >>
 >>- nt\_step: Computes $x^{\left(n\right)}-x^{\left(n+1\right)}$ for the Newton method and calls attempt. If the proposal is refused tries to use the same step with opposite sign.
 >>
