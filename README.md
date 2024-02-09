@@ -16,15 +16,15 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >>
 >>The first partial derivative of $\phi$ in $\partial\theta\_i$ is
 >>
->>$\frac{\partial\phi}{\partial\theta\_i}=w\_i\sum\_{k=1,\dots,{\rm N}}\left(\sum\_{i=1,\dots,n}\omega\_if\left({\rm X}\_k,\theta\_i\right)\right)^{-1}\frac{\partial}{\partial\theta}f\left({\rm X}\_k,\theta\_i\right).$
+>>$$\frac{\partial\phi}{\partial\theta\_i}=w\_i\sum\_{k=1,\dots,{\rm N}}\left(\sum\_{i=1,\dots,n}\omega\_if\left({\rm X}\_k,\theta\_i\right)\right)^{-1}\frac{\partial}{\partial\theta}f\left({\rm X}\_k,\theta\_i\right).$$
 >>
 >>The second partial derivative in $\partial\theta\_i^2$ is
 >>
->>$\frac{\partial^2\phi}{\partial\theta\_i^2}=\sum\_{k=1,\dots,{\rm N}}\left(\omega\_i\left(\sum\_{j=1,\dots,n}\omega\_jf\left({\rm X}\_k,\theta\_j\right)\right)^{-1}\frac{\partial^2}{\partial\theta^2}f\left({\rm X}\_k,\theta\_i\right)-\omega\_i^2\left(\left(\sum\_{j=1,\dots,n}\omega\_jf\left({\rm X}\_k,\theta\_j\right)\right)^{-1}\frac{\partial}{\partial\theta}f\left({\rm X}\_k,\theta\_j\right)\right)^2\right).$
+>>$$\frac{\partial^2\phi}{\partial\theta\_i^2}=\sum\_{k=1,\dots,{\rm N}}\left(\omega\_i\left(\sum\_{j=1,\dots,n}\omega\_jf\left({\rm X}\_k,\theta\_j\right)\right)^{-1}\frac{\partial^2}{\partial\theta^2}f\left({\rm X}\_k,\theta\_i\right)-\omega\_i^2\left(\left(\sum\_{j=1,\dots,n}\omega\_jf\left({\rm X}\_k,\theta\_j\right)\right)^{-1}\frac{\partial}{\partial\theta}f\left({\rm X}\_k,\theta\_j\right)\right)^2\right).$$
 >>
 >>The second derivative in $\partial\theta\_i\partial\theta\_j$ is
 >>
->>$\frac{\partial^2\phi}{\partial\theta\_i\partial\theta\_j}=-\omega\_i\omega\_j\sum\_{k=1,\dots,{\rm N}}\left(\sum\_{l=1,\dots,n}\omega\_lf\left({\rm X}\_k,\theta\_l\right)\right)^{-2}\left(\frac{\partial}{\partial\theta}f\left({\rm X}\_k,\theta\_i\right)\right)\left(\frac{\partial}{\partial\theta}f\left({\rm X}\_k,\theta\_j\right)\right)$
+>>$$\frac{\partial^2\phi}{\partial\theta\_i\partial\theta\_j}=-\omega\_i\omega\_j\sum\_{k=1,\dots,{\rm N}}\left(\sum\_{l=1,\dots,n}\omega\_lf\left({\rm X}\_k,\theta\_l\right)\right)^{-2}\left(\frac{\partial}{\partial\theta}f\left({\rm X}\_k,\theta\_i\right)\right)\left(\frac{\partial}{\partial\theta}f\left({\rm X}\_k,\theta\_j\right)\right).$$
 >>
 >>Assume that the weights of the mixture are know. The problem is then reduced to find the minimum of a function, $\phi$, for which the first and second derivatives are available.
 >
@@ -32,15 +32,15 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >>
 >>The first partial derivative in $\partial\omega\_i$ is
 >>
->>$\frac{\partial\phi}{\partial\omega\_i}=\sum\_{k=1,\dots,{\rm N}}\left(\sum\_{j=1,\dots,n}\omega\_jf\left({\rm X}\_k,\theta\_j\right)\right)^{-1}f\left({\rm X\_k},\theta\_i\right)$
+>>$$\frac{\partial\phi}{\partial\omega\_i}=\sum\_{k=1,\dots,{\rm N}}\left(\sum\_{j=1,\dots,n}\omega\_jf\left({\rm X}\_k,\theta\_j\right)\right)^{-1}f\left({\rm X\_k},\theta\_i\right)$$
 >>
 >>so that, if
 >>
->>${\mathbb P}\left(\theta\_i\left|x,\omega\right.\right)\coloneqq\frac{\omega\_if\left(x,\theta\_i\right)}{\sum_{j=1,\dots,n}\omega\_jf\left(x,\theta\_j\right)}$
+>>$${\mathbb P}\left(\theta\_i\left|x,\omega\right.\right)\coloneqq\frac{\omega\_if\left(x,\theta\_i\right)}{\sum_{j=1,\dots,n}\omega\_jf\left(x,\theta\_j\right)}$$
 >>
 >>then
 >>
->>$\frac{1}{\omega\_i}\left<\theta\_i\left|{\rm X},\omega\right.\right>\coloneqq\frac{1}{\omega\_i{\rm N}}\sum\_{k=1,\dots{\rm N}}{\mathbb P}\left(\theta\_i\left|{\rm X}\_k,\omega\right.\right)=\frac{1}{\rm N}\frac{\partial\phi}{\partial\omega\_i}$
+>>$$\frac{1}{\omega\_i}\left<\theta\_i\left|{\rm X},\omega\right.\right>\coloneqq\frac{1}{\omega\_i{\rm N}}\sum\_{k=1,\dots{\rm N}}{\mathbb P}\left(\theta\_i\left|{\rm X}\_k,\omega\right.\right)=\frac{1}{\rm N}\frac{\partial\phi}{\partial\omega\_i}$$
 >>
 >>so that if $\left<\theta\_i\left|{\rm X},\omega\right.\right>=\omega\_i$, then the gradient of $\phi$ is parallel to the constraint $\sum\_{i=1,\dots,n}\omega\_i=1$. Then we can obtain a maximum likelihood estimator recursively applying $\omega\_i^{\left(n+1\right)}=\left<\theta\_i\left|{\rm X},\omega^{\left(n\right)}\right.\right>$. The actual convergence of this method to a maximum likelihood estimator has to be, mathematically speaking, further investigated.
 >
