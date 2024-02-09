@@ -106,7 +106,7 @@ This class attempts to apply quasi-Newton methods to a maximum likelihood proble
 >
 >>### Our protocol for the minimization
 >>
->>It is desirable to use the Newton's method to find $\argmin\phi$, but to ensure that series $x^{\left(n\right)}$ converges to a local minimum and not to a local maximum, or a saddle point, we alternate the two methods. Moreover at each iteration we check that $\phi\left(x^{\left(n+1\right)}\right)<\phi\left(x^{\left(n\right)}\right)$ and accept $x^{\left(n+1\right)}$ only if the condition is satisfied. The problem of chosing $\varepsilon^{\left(n\right)}$ and of deciding how to alternate the two methods is challenging.
+>>It is desirable to use the Newton's method to find $\arg\min\phi$, but to ensure that series $x^{\left(n\right)}$ converges to a local minimum and not to a local maximum, or a saddle point, we alternate the two methods. Moreover at each iteration we check that $\phi\left(x^{\left(n+1\right)}\right)<\phi\left(x^{\left(n\right)}\right)$ and accept $x^{\left(n+1\right)}$ only if the condition is satisfied. The problem of chosing $\varepsilon^{\left(n\right)}$ and of deciding how to alternate the two methods is challenging.
 >>
 >>Our arbitrary protocol consists in repeating what follows until a stopping condition is satisfied:
 >>- three integers $n_{rd},n_{gd},n_{nt}$ and two numbers $\varepsilon_{rd},\varepsilon_{rd}$ are given
