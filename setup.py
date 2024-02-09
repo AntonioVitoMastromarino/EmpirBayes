@@ -24,11 +24,11 @@ setup(
       'matplotlib',
       'pandas',
       'scipy',
+    ],
     extras_require={
       'docs': [
         'sphinx',
         'sphinx_rtd_theme',
       ],
     },
-    ],
 )
