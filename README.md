@@ -26,7 +26,7 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >>
 >>$\frac{\partial^2\phi}{\partial\theta\_i\partial\theta\_j}=-\omega\_i\omega\_j\sum\_{k=1,\dots,{\rm N}}\left(\sum\_{l=1,\dots,n}\omega\_lf\left({\rm X}\_k,\theta\_l\right)\right)^{-2}\left(\frac{\partial}{\partial\theta}f\left({\rm X}\_k,\theta\_i\right)\right)\left(\frac{\partial}{\partial\theta}f\left({\rm X}\_k,\theta\_j\right)\right)$
 >>
->>Assume that the weights of the mixture are know. The problem is then reduced to find the maximum of a function for which the first and second derivatives are available.
+>>Assume that the weights of the mixture are know. The problem is then reduced to find the minimum of a function, $\phi$, for which the first and second derivatives are available.
 >
 >>### Optimize the weights
 >>
