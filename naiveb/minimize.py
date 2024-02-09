@@ -274,6 +274,7 @@ class Minimize:
       iter += 1
       try:
         self.gd_step(rate, 0)
+        rate += rates[1] / (steps[1] + 1)**2
         succ[1] += 1
       except:
         rate -= rates[1] / (steps[1] + 1)
@@ -328,14 +329,12 @@ class Minimize:
     while (np.linalg.norm(self.grad(self.guess)) < toll) and not condition():
 
       succ, fail = self(rates, steps, condition = lambda: np.linalg.norm(self.grad(self.guess)) < toll)
-      if (succ[0] > 0):
-        rates[0] *= 1 + succ[0] / (steps[0] + 1)
-      if (succ[1] > 0):
-        rates[1] *= (2 * succ[1] + 1) / (steps[1] + 1)
+      rates[0] *= 1 + succ[0] / (steps[0] + 1)
+      rates[1] *= 1 - fail[1] / (steps[1] + 1) + succ[1] / (steps[1] + 1)**2
 
       if (fail[2] > 0):
         steps[0], steps[1] = rot(steps[0], steps[1], C)
       else:
-        steps[1], steps[0] = rot(steps[1], steps[0], C)
         rates[0] /= 2**steps[0]
+        steps[1], steps[0] = rot(steps[1], steps[0], C)
     
