@@ -6,11 +6,11 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >
 >The likelihood in our problem is a mixture of a fixed number of _conditional_ likelihoods.
 >
->$f\left(x,\theta,\omega\right)=\sum\_{i=1,\dots,n}\omega\_if\left(x,\theta\_i\right).$
+>$$f\left(x,\theta,\omega\right)=\sum\_{i=1,\dots,n}\omega\_if\left(x,\theta\_i\right).$$
 >
 >Here $n$ is the number of components of the mixture and $\{w\_i: i = 1, \dots, n\}$ are the weights. The function to maximize is the logarithm of the likelihood of a series of independent observations $\{{\rm X}\_k:k=1,\dots,{\rm N}\}$
 >
->$-\phi\left(\theta,\omega\right)=\log\left(\prod\_{k=1,\dots,{\rm N}}\sum\_{i=1,\dots,n}\omega\_if\left({\rm X}\_k,\theta\_i\right)\right)=\sum\_{k=1,\dots,{\rm N}}\log\left(\sum\_{i=1,\dots,n}\omega\_if\left({\rm X}\_k,\theta\_i\right)\right).$
+>$$-\phi\left(\theta,\omega\right)=\log\left(\prod\_{k=1,\dots,{\rm N}}\sum\_{i=1,\dots,n}\omega\_if\left({\rm X}\_k,\theta\_i\right)\right)=\sum\_{k=1,\dots,{\rm N}}\log\left(\sum\_{i=1,\dots,n}\omega\_if\left({\rm X}\_k,\theta\_i\right)\right).$$
 >
 >>### Optimize the parameters 
 >>
