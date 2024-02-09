@@ -1,6 +1,6 @@
 # NaiveB
 
-This class attempts to apply quasi-Newton methods to a maximum likelihood problem where the likelihood is a weighted mixture.
+This class attempts to apply quasi-Newton method to a maximum likelihood problem where the likelihood is a weighted mixture.
 
 >## The model: naiveb.cluster
 >
