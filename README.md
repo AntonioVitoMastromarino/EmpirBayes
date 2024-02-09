@@ -55,6 +55,7 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >>- prior $=\omega^{\left(0\right)}$
 >>- theta $=\theta^{\left(0\right)}$
 >>- gap $=\left|\omega^{\left(n+1\right)}-\omega^{\left(n\right)}\right|$ has to be set when $\omega$ is updated.
+>>- constrain $=f\left(x,\theta\right)\ne0$ is well defined.
 >>
 >>The methods of this class are:
 >>
