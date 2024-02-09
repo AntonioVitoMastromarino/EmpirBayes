@@ -62,7 +62,7 @@ This class attempts to apply quasi-Newton methods to a maximum likelihood proble
 >>
 >>- calibrator: Given a sample $\{{\rm X}\_k:k=1,\dots,{\rm N}\}$ return an object of the class naiveb.minimize.Minimize, when called this object tries to optimize $\theta$ eventually updating the weights.
 >>
->>- __call__: Given the hyperparameters necessary to the minimization protocol described below, runs the protocol. At each iteration of the protocol $\theta$ is optimized, then, if $\left|\partial\phi\right|$ is smaller that a tollerance, the parameter $\omega$ is updated. If the gap $\left|\omega^{\left(n+1\right)}-\omega^{\left(n\right)}\right|$ is smaller than a tollerance, then condition is satisfied and the protocol returns.
+>>- \_\_call\_\_: Given the hyperparameters necessary to the minimization protocol described below, runs the protocol. At each iteration of the protocol $\theta$ is optimized, then, if $\left|\partial\phi\right|$ is smaller that a tollerance, the parameter $\omega$ is updated. If the gap $\left|\omega^{\left(n+1\right)}-\omega^{\left(n\right)}\right|$ is smaller than a tollerance, then condition is satisfied and the protocol returns.
 
 >## Optimization problems: naiveb.minimize
 >
@@ -139,8 +139,8 @@ This class attempts to apply quasi-Newton methods to a maximum likelihood proble
 >>- $\varepsilon\_{gd}$ is always near enough to its most effective value.
 >>- $\varepsilon\_{rd}$ is almost always large, so that the random descend can search for more advantageous areas in case getting stuck to a local minimum.
 >>- $\varepsilon\_{rd}$ suddenly decays when the guess gets closer to a zero of the gradient, to prevent converging to a possible saddle point.
->>- $n\_{rd}<n\_{gd}$ until a neighborhood of a zero of the gradient is reached.
->>- $n\_{gd}<n\_{rd}$ when close to a zero of the gradient, so that the gradient descend is replaced by the more effective newton method and the random descend prevents convergence to saddle points.
+>>- $n\_{rd}{\lt}n\_{gd}$ until a neighborhood of a zero of the gradient is reached.
+>>- $n\_{gd}{\lt}n\_{rd}$ when close to a zero of the gradient, so that the gradient descend is replaced by the more effective newton method and the random descend prevents convergence to saddle points.
 >>- The increase of $n\_{rd}$ near to saddles allows $\varepsilon\_{rd}$ to increase again during the iterations, balancing its decay.
 >
 >>### Content of the module
@@ -152,7 +152,7 @@ This class attempts to apply quasi-Newton methods to a maximum likelihood proble
 >>- grad $=\nabla\phi\left(x\right)$
 >>- hess $=\nabla^2\phi\left(x\right)^{-1}$
 >>- constrain is equivalent to $\phi\left(x\right)<+\infty$
->>- update is called at the end of the method __call__
+>>- update is called at the end of the method \_\_call\_\_
 >>- grad\_avail: is True when grad is initialized. If False, grad is inferred with the class Linear (in development)
 >>- hess\_avail: is True when hess is initialized. If False, hess is inferred with the class Linear (in development)
 >>
@@ -166,9 +166,9 @@ This class attempts to apply quasi-Newton methods to a maximum likelihood proble
 >>
 >>- gd\_step: Given $\varepsilon\_{gd},\varepsilon\_{rd}$ computes $x^{\left(n\right)}-x^{\left(n+1\right)}$ for the gradient descent and for the random descent, then calls attempt. If the proposal is refused tries to use the same step with opposite sign. The use of this method with both parameters different from zero has not been tested.
 >>
->>- __call__: Given $n\_{rd},n\_{gd},n\_{nt}, \varepsilon\_{rd},\varepsilon\_{rd}$ and a tollerance, repeat one cycle of the protocol described above, returns the number of accepted proposals and the number of the refused proposals so that the user can tune them at their taste (other hyperparameters will be available for further flexibility).
+>>- \_\_call\_\_: Given $n\_{rd},n\_{gd},n\_{nt}, \varepsilon\_{rd},\varepsilon\_{rd}$ and a tollerance, repeat one cycle of the protocol described above, returns the number of accepted proposals and the number of the refused proposals so that the user can tune them at their taste (other hyperparameters will be available for further flexibility).
 >>
->>- protocol: Given $n\_{rd},n\_{gd},n\_{nt}, \varepsilon\_{rd},\varepsilon\_{rd}$ and a tollerance, repeatedly calls the method __call__ adjusting them at each iteration. It never stops until the stopping condition is satisfied and has no maximum number of iterations, so a limit has to be set as optional argument in the condition.
+>>- protocol: Given $n\_{rd},n\_{gd},n\_{nt}, \varepsilon\_{rd},\varepsilon\_{rd}$ and a tollerance, repeatedly calls the method \_\_call\_\_ adjusting them at each iteration. It never stops until the stopping condition is satisfied and has no maximum number of iterations, so a limit has to be set as optional argument in the condition.
 >
 >## Inferring the gradient and the Hessian: naiveb.linear
 >
