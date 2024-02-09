@@ -179,11 +179,11 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >
 >If only the gradient of $\phi$ is available, then the Hessian can be inferred as
 >
->$\nabla^2\phi\left(y^{\left(n+1\right)}\right)^{-1}\left(\nabla\phi\left(x^{\left(n+1\right)}\right)-\nabla\phi\left(x^{\left(n\right)}\right)\right)=x^{\left(n+1\right)}-x^{\left(n\right)}$
+>$$\nabla^2\phi\left(y^{\left(n+1\right)}\right)^{-1}\left(\nabla\phi\left(x^{\left(n+1\right)}\right)-\nabla\phi\left(x^{\left(n\right)}\right)\right)=x^{\left(n+1\right)}-x^{\left(n\right)}$$
 >
 >If the gradient is not available, it can be inferred by
 >
->$\nabla\phi\left(y^{\left(n+1\right)}\right)\left(x^{\left(n+1\right)}-x^{\left(n\right)}\right)=\phi\left(x^{\left(n+1\right)}\right)-\phi\left(x^{\left(n\right)}\right).$
+>$$\nabla\phi\left(y^{\left(n+1\right)}\right)\left(x^{\left(n+1\right)}-x^{\left(n\right)}\right)=\phi\left(x^{\left(n+1\right)}\right)-\phi\left(x^{\left(n\right)}\right).$$
 >
 >While the Hessian (this is CHALLENGING: in development)
 >
