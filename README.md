@@ -79,11 +79,11 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >>
 >>Starting from an initial guess $x^{\left(0\right)}$ and updating recursively $x^{\left(n+1\right)}=x^{\left(n\right)}-\varepsilon^{\left(n\right)}\nabla\phi\left(x^{\left(n\right)}\right)$ one obtain
 >>
->>$\phi\left(x^{\left(n+1\right)}\right) = \phi\left(x^{\left(n\right)}\right)-\varepsilon^{\left(n\right)}\nabla\phi\left(x^{\left(n\right)}-\lambda^{\left(n\right)}\varepsilon^{\left(n\right)}\nabla\phi\left(x^{\left(n\right)}\right)\right)\cdot\nabla\phi\left(x^{\left(n\right)}\right)$
+>>$$\phi\left(x^{\left(n+1\right)}\right) = \phi\left(x^{\left(n\right)}\right)-\varepsilon^{\left(n\right)}\nabla\phi\left(x^{\left(n\right)}-\lambda^{\left(n\right)}\varepsilon^{\left(n\right)}\nabla\phi\left(x^{\left(n\right)}\right)\right)\cdot\nabla\phi\left(x^{\left(n\right)}\right)$$
 >>
 >>for a certain series of $\lambda^{\left(n\right)}\in\left[0,1\right]$. Assume that $x^{\left(n\right)}$ is not a minimum, if the learning rate $\varepsilon^{\left(n\right)}$ is small enough the term
 >>
->>$\lim\_{\varepsilon^{\left(n\right)}\rightarrow0}\nabla\phi\left(x^{\left(n\right)}-\lambda^{\left(n\right)}\varepsilon^{\left(n\right)}\nabla\phi\left(x^{\left(n\right)}\right)\right)\cdot\nabla\phi\left(x^{\left(n\right)}\right)=\left|\nabla\phi\left(x^{\left(n\right)}\right)\right|^2>0$
+>>$$\lim\_{\varepsilon^{\left(n\right)}\rightarrow0}\nabla\phi\left(x^{\left(n\right)}-\lambda^{\left(n\right)}\varepsilon^{\left(n\right)}\nabla\phi\left(x^{\left(n\right)}\right)\right)\cdot\nabla\phi\left(x^{\left(n\right)}\right)=\left|\nabla\phi\left(x^{\left(n\right)}\right)\right|^2>0$$
 >>
 >>is positive. That means that $\phi\left(x^{\left(n+1\right)}\right)<\phi\left(x^{\left(n\right)}\right)$, unfortunately the improvement is about $\phi\left(x^{\left(n+1\right)}\right)-\phi\left(x^{\left(n\right)}\right)\simeq\varepsilon^{\left(n\right)}\left|\nabla\phi\left(x^{\left(n\right)}\right)\right|^2$ which is small near the local minima and it is proportional to the learning rate (so a small learning rate means a slow convergence to the local minimum).
 >
@@ -91,23 +91,23 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >>
 >>The Newton's method does not actually look for the local minimum of $\phi$, but for a zero of $\psi=\nabla\phi$. Say that $\psi\left(x\_0\right)=0$ and that the initial guess $x^{\left(n\right)}$ is near enough to $x\_0$, then
 >>
->>$0=\psi\left(x\_0\right)=\psi\left(x^{\left(n\right)}\right)+\nabla\psi\left(x^{\left(n\right)}\right)\left(x\_0 - x^{\left(n\right)}\right)+o\left|x\_0-x^{\left(n\right)}\right|$
+>>$$0=\psi\left(x\_0\right)=\psi\left(x^{\left(n\right)}\right)+\nabla\psi\left(x^{\left(n\right)}\right)\left(x\_0 - x^{\left(n\right)}\right)+o\left|x\_0-x^{\left(n\right)}\right|$$
 >>
 >>so that
 >>
->>$x\_0=x^{\left(n\right)}-\nabla\psi\left(x^{\left(n\right)}\right)^{-1}\left(\psi\left(x^{\left(n\right)}\right)+o\left|x\_0-x^{\left(n\right)}\right|\right).$
+>>$$x\_0=x^{\left(n\right)}-\nabla\psi\left(x^{\left(n\right)}\right)^{-1}\left(\psi\left(x^{\left(n\right)}\right)+o\left|x\_0-x^{\left(n\right)}\right|\right).$$
 >>
 >>Defining recursively
 >>
->>$x^{\left(n+1\right)}=x^{\left(n\right)}-\nabla\psi\left(x^{\left(n\right)}\right)^{-1}\left(\psi\left(x^{\left(n\right)}\right)\right)$
+>>$$x^{\left(n+1\right)}=x^{\left(n\right)}-\nabla\psi\left(x^{\left(n\right)}\right)^{-1}\left(\psi\left(x^{\left(n\right)}\right)\right)$$
 >>
 >>one obtain that
 >>
->>$\left|x^{\left(n+1\right)}-x\_0\right|=\nabla\psi\left(x^{\left(n\right)}\right)^{-1}o\left|x\_0-x^{\left(n\right)}\right|$
+>>$$\left|x^{\left(n+1\right)}-x\_0\right|=\nabla\psi\left(x^{\left(n\right)}\right)^{-1}o\left|x\_0-x^{\left(n\right)}\right|$$
 >>
 >>so that if $\nabla\psi$ (*i.e.: the Hessian of $\phi$*) is non-singular in $x\_0$, then the convergence of $x^{\left(n\right)}$ to $x\_0$ is super-linear, if moreover $\psi$ admits second derivative in $x\_0$ (*i.e.: the Hessian of $\phi$ is differentiable in $x\_0$*), then
 >>
->>$\log\left(-\log\left|x^{\left(n\right)}-x\_0\right|\right)\simeq\log\left(2\right)n.$
+>>$$\log\left(-\log\left|x^{\left(n\right)}-x\_0\right|\right)\simeq\log\left(2\right)n.$$
 >
 >>### Our protocol for the minimization
 >>
