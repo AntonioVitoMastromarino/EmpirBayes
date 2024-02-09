@@ -22,8 +22,14 @@ class Linear:
   
   '''
 
-
   def __init__(self, dim):
+
+    '''
+    Inputs:
+    Output:
+
+    '''
+
     self.dim=dim
     self.rec=0
     self.inputs=[]
@@ -31,6 +37,13 @@ class Linear:
   
   
   def __call__(self, x):
+
+    '''
+    Inputs:
+    Output:
+
+    '''
+
     if self.rec < self.dim:
       x_dep=np.array([(x @ u)*u for u in self.inputs])
       y_dep=np.array([(x @ u)*v for (u,v) in zip(self.inputs, self.output)])
@@ -40,6 +53,13 @@ class Linear:
   
   
   def __add__(self, xy):
+
+    '''
+    Inputs:
+    Output:
+
+    '''
+
     x, y = xy
     if self.rec < self.dim:
       x_dep = np.array([(x @ u) * u for u in self.inputs]).sum()

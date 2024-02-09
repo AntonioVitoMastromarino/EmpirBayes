@@ -1,27 +1,74 @@
 # NaiveB
-This class attempts to apply quasi-Newton methods to a maximum likelihood problem. The likelihood in our problem is a mixture of a fixed number of 'conditional' likelihoods.
 
-$f\left(x,\theta_i:i=1,\dots,n\right)=\sum_{i=1,\dots,n}\omega_if\left(x,\theta_i\right).$
+This class attempts to apply quasi-Newton methods to a maximum likelihood problem where the likelihood is a weighted mixture.
 
-Here $n$ is the number of components of the mixture and $\{w_i: i = 1, \dots, n\}$ are the weights. The function to maximize is the logarithm of the likelihood of a series of independent observations $\{{\rm X}_k:k=1,\dots,{\rm N}\}$
+>## The model: naiveb.cluster
+>
+>The likelihood in our problem is a mixture of a fixed number of 'conditional' likelihoods.
+>
+>$f\left(x,\theta,\omega\right)=\sum_{i=1,\dots,n}\omega_if\left(x,\theta_i\right).$
+>
+>Here $n$ is the number of components of the mixture and $\{w_i: i = 1, \dots, n\}$ are the weights. The function to maximize is the logarithm of the likelihood of a series of independent observations $\{{\rm X}_k:k=1,\dots,{\rm N}\}$
+>
+>$-\phi\left(\theta,\omega\right)=\log\left(\prod_{k=1,\dots,{\rm N}}\sum_{i=1,\dots,n}\omega_if\left({\rm X}_k,\theta_i\right)\right)=\sum_{k=1,\dots,{\rm N}}\log\left(\sum_{i=1,\dots,n}\omega_if\left({\rm X}_k,\theta_i\right)\right).$
+>
+>>### Optimize the parameters 
+>>
+>>The first partial derivative of $\phi$ in $\partial\theta_i$ is
+>>
+>>$\frac{\partial\phi}{\partial\theta_i}=w_i\sum_{k=1,\dots,{\rm N}}\left(\sum_{i=1,\dots,n}\omega_if\left({\rm X}_k,\theta_i\right)\right)^{-1}\frac{\partial}{\partial\theta}f\left({\rm X}_k,\theta_i\right).$
+>>
+>>The second partial derivative in $\partial\theta_i^2$ is
+>>
+>>$\frac{\partial^2\phi}{\partial\theta_i^2}=\sum_{k=1,\dots,{\rm N}}\left(\omega_i\left(\sum_{j=1,\dots,n}\omega_jf\left({\rm X}_k,\theta_j\right)\right)^{-1}\frac{\partial^2}{\partial\theta^2}f\left({\rm X}_k,\theta_i\right)-\omega_i^2\left(\left(\sum_{j=1,\dots,n}\omega_jf\left({\rm X}_k,\theta_j\right)\right)^{-1}\frac{\partial}{\partial\theta}f\left({\rm X}_k,\theta_j\right)\right)^2\right).$
+>>
+>>The second derivative in $\partial\theta_i\partial\theta_j$ is
+>>
+>>$\frac{\partial^2\phi}{\partial\theta_i\partial\theta_j}=-\omega_i\omega_j\sum_{k=1,\dots,{\rm N}}\left(\sum_{l=1,\dots,n}\omega_lf\left({\rm X}_k,\theta_l\right)\right)^{-2}\left(\frac{\partial}{\partial\theta}f\left({\rm X}_k,\theta_i\right)\right)\left(\frac{\partial}{\partial\theta}f\left({\rm X}_k,\theta_j\right)\right)$
+>>
+>>Assume that the weights of the mixture are know. The problem is then reduced to find the maximum of a function for which the first and second derivatives are available.
+>
+>>### Optimize the weights
+>>
+>>The first partial derivative in $\partial\omega_i$ is
+>>
+>>$\frac{\partial\phi}{\partial\omega_i}=\sum_{k=1,\dots,{\rm N}}\left(\sum_{j=1,\dots,n}\omega_jf\left({\rm X}_k,\theta_j\right)\right)^{-1}f\left({\rm X_k},\theta_i\right)$
+>>
+>>so that
+>>
+>>$\frac{1}{\omega_i}f\left(\theta_i,{\rm X},\omega\right)=\frac{1}{\omega_i\rm N}\sum_{k=1,\dots,{\rm N}}f\left(\theta_i,{\rm X}_k,\omega\right)=\frac{1}{\rm N}\frac{\partial\phi}{\partial\omega_i}$
+>>
+>>so that if $f\left(\theta_i,{\rm X},\omega\right)=\omega_i$, then the gradient of $\phi$ is parallel to the constrain $\sum_{i=1,\dots,n}\omega_i=1$. Then we can obtain a maximum likelihood estimator recursively applying $\omega_i^{\left(n+1\right)}=f\left(\theta_i,{\rm X},\omega^{\left(n\right)}\right)$. The actual convergence of this method to a maximum likelihood estimator has to be, mathematically speaking, further investigated.
+>
+>>### Content of the module
+>>
+>>The module contains a class naiveb.cluster.Cluster which is initialized with:
+>>- num $=n$
+>>- dim $=d$ such that $\theta\in{\mathbb R}^d$
+>>- func $=f:\mathcal X\times{\mathbb R}^d\rightarrow\left[0,\infty\right)$ such that $\mathrm X_k:\Omega\rightarrow{\cal X}$
+>>- grad $=\frac{\partial}{\partial\theta}f$
+>>- hess $=\frac{\partial^2}{\partial\theta^2}f$
+>>- prior $=\omega^{\left(0\right)}$
+>>- theta $=\theta^{\left(0\right)}$
+>>- gap $=\left|\omega^{\left(n+1\right)}-\omega^{\left(n\right)}\right|$ has to be set when $\omega$ is updated.
+>>
+>>The methods of this class are:
+>>
+>>- log_like: Computes $\phi$ from a sample $\{{\rm X}_k:k=1,\dots,{\rm N}\}$
+>>
+>>- grad_log: Computes $\frac{\partial\phi}{\partial\theta}$ from a sample $\{{\rm X}_k:k=1,\dots,{\rm N}\}$
+>>
+>>- inv_hess: Computes the inverse matrix of $\frac{\partial^2\phi}{\partial\theta^2}$ from a sample $\{{\rm X}_k:k=1,\dots,{\rm N}\}$
+>>
+>>- calibrator: Given a sample $\{{\rm X}_k:k=1,\dots,{\rm N}\}$ return an object of the class naiveb.minimize.Minimize, when called this object tries to optimize $\theta$ eventually updating the weights.
+>>
+>>- \_\_call\_\_: Given the hyperparameters necessary to the minimization protocol described below, runs the protocol. At each iteration of the protocol $\theta$ is optimized, then, if $\left|\partial\phi\right|$ is smaller that a tollerance, the parameter $\omega$ is updated. If the gap $\left|\omega^{\left(n+1\right)}-\omega^{\left(n\right)}\right|$ is smaller than a tollerance, then condition is satisfied and the protocol returns.
 
-$\log\left(\prod_{k=1,\dots,{\rm N}}\sum_{i=1,\dots,n}f\left({\rm X}_k,\theta_i\right)\right)=\sum_{k=1,\dots,{\rm N}}\log\left(\sum_{i=1,\dots,n}f\left({\rm X}_k,\theta_i\right)\right).$
-
-The first partial derivative of this in $\partial\theta_i$ is
-
-$w_i\sum_{k=1,\dots,{\rm N}}\left(\sum_{i=1,\dots,n}f\left({\rm X}_k,\theta_i\right)\right)^{-1}\frac{\partial}{\partial\theta}f\left({\rm X}_k,\theta_i\right)$
-
-the second partial derivative in $\partial\theta_i^2$ is
-
-$w_i\sum_{k=1,\dots,{\rm N}}\left(\left(\sum_{i=1,\dots,n}f\left({\rm X}_k,\theta_i\right)\right)^{-1}\frac{\partial^2}{\partial\theta^2}f\left({\rm X}_k,\theta_i\right)-\left(\left(\sum_{i=1,\dots,n}f\left({\rm X}_k,\theta_i\right)\right)^{-1}\frac{\partial}{\partial\theta}f\left({\rm X}_k,\theta_i\right)\right)^2\right)$
-
-while the second derivative in $\partial\theta_i\partial\theta_j$ is
-
-$-w_i\sum_{k=1,\dots,{\rm N}}\left(\sum_{i=1,\dots,n}f\left({\rm X}_k,\theta_i\right)\right)^{-2}\left(\frac{\partial}{\partial\theta}f\left({\rm X}_k,\theta_i\right)\right)\left(\frac{\partial}{\partial\theta}f\left({\rm X}_k,\theta_j\right)\right)$
-
-Assume that the weights of the mixture are know. The problem is then reduced to find the maximum of a function for which the first and second derivatives are available.
-
->## Optimization problems
+>## Optimization problems: naiveb.minimize
+>
+>>### Random descent
+>>
+>>Starting from an initial guess $x^{\left(0\right)}$ and updating recursively $x^{\left(n+1\right)}\sim{\cal N}\left(x^{\left(n\right)},\varepsilon^{\left(n\right)}\right)$ as a Gaussian random variable. Then accept $x^{\left(n+1\right)}$ if the condition $\phi\left(x^{\left(n+1\right)}\right)<\phi\left(x^{\left(n\right)}\right)$ is satisfied.
 >
 >>### Gradient descent
 >>
@@ -37,7 +84,7 @@ Assume that the weights of the mixture are know. The problem is then reduced to 
 >
 >>### Newton's method
 >>
->>The Newton's method does not actually looks for the local minimum of $\phi$, but for a zero of $\psi=\nabla\phi$. Say that $\psi\left(x_0\right)=0$ and that the initial guess $x^{\left(n\right)}$ is near enough to $x_0$, then
+>>The Newton's method does not actually look for the local minimum of $\phi$, but for a zero of $\psi=\nabla\phi$. Say that $\psi\left(x_0\right)=0$ and that the initial guess $x^{\left(n\right)}$ is near enough to $x_0$, then
 >>
 >>$0=\psi\left(x_0\right)=\psi\left(x^{\left(n\right)}\right)+\nabla\psi\left(x^{\left(n\right)}\right)\left(x_0 - x^{\left(n\right)}\right)+o\left|x_0-x^{\left(n\right)}\right|$
 >>
@@ -53,8 +100,94 @@ Assume that the weights of the mixture are know. The problem is then reduced to 
 >>
 >>$\left|x^{\left(n+1\right)}-x_0\right|=\nabla\psi\left(x^{\left(n\right)}\right)^{-1}o\left|x_0-x^{\left(n\right)}\right|$
 >>
->>so that if $\nabla\psi$ (*i.e.: the Hessian of $\phi$*) is non-singular in $x_0$, then the convergence of $x^{\left(n\right)}$ to $x_0$ is super-linear, if moreover $\psi$ admits second derivative in $x_0$ (_i.e.: the Hessian of $\phi$ is differentiable in $x_0$_), then
+>>so that if $\nabla\psi$ (*i.e.: the Hessian of $\phi$*) is non-singular in $x_0$, then the convergence of $x^{\left(n\right)}$ to $x_0$ is super-linear, if moreover $\psi$ admits second derivative in $x_0$ (*i.e.: the Hessian of $\phi$ is differentiable in $x_0$*), then
 >>
 >>$\log\left(-\log\left|x^{\left(n\right)}-x_0\right|\right)\simeq\log\left(2\right)n.$
 >
->It is desirable to use the Newton's method to find $\argmin\phi$, but to ensure that series $x^{\left(n\right)}$ converges to a local minimum and not to a local maximum, or a saddle point, we alternate the two methods. Moreover at each iteration we check that $\phi\left(x^{\left(n+1\right)}\right)<\phi\left(x^{\left(n\right)}\right)$ and accept $x^{\left(n+1\right)}$ only if the condition is satisfied. The problem of chosing $\varepsilon^{\left(n\right)}$ and of deciding how to alternate the two methods is challenging.
+>>### Our protocol for the minimization
+>>
+>>It is desirable to use the Newton's method to find $\argmin\phi$, but to ensure that series $x^{\left(n\right)}$ converges to a local minimum and not to a local maximum, or a saddle point, we alternate the two methods. Moreover at each iteration we check that $\phi\left(x^{\left(n+1\right)}\right)<\phi\left(x^{\left(n\right)}\right)$ and accept $x^{\left(n+1\right)}$ only if the condition is satisfied. The problem of chosing $\varepsilon^{\left(n\right)}$ and of deciding how to alternate the two methods is challenging.
+>>
+>>Our arbitrary protocol consists in repeating what follows until a stopping condition is satisfied:
+>>- three integers $n_{rd},n_{gd},n_{nt}$ and two numbers $\varepsilon_{rd},\varepsilon_{rd}$ are given
+>>- for $n=0,\dots,n_{rd}-1$:
+>>- - update the guess $x^{\left(n\right)}$ with random descent, $\varepsilon^{\left(n\right)}=\varepsilon_{rd}$
+>>- - if the proposal is refused, just set $x^{\left(n+1\right)}=x^{\left(n\right)}$ 
+>>- - otherwise, slightly increase $\varepsilon_{rd}$ 
+>>- - if a stopping condition is satisfied return
+>>- set $x^{\left(0\right)}=x^{\left(n_{rd}\right)}$
+>>- for $n=0,\dots,n_{gd}-1$:
+>>- - update the guess $x^{\left(n\right)}$ with gradiendt descent, $\varepsilon^{\left(n\right)}=\varepsilon_{gd}$
+>>- - if the proposal is refused, just set $x^{\left(n+1\right)}=x^{\left(n\right)}$ and reduce $\varepsilon_{gd}$
+>>- - otherwise slightly increase $\varepsilon_{gd}$
+>>- - if a stopping condition is satisfied return
+>>- set $x^{\left(0\right)}=x^{\left(n_{gd}\right)}$
+>>- for $n=0,\dots,n_{nt}-1$:
+>>- - update the guess $x^{\left(n\right)}$ with gradiendt descent, $\varepsilon^{\left(n\right)}=\varepsilon_{gd}$
+>>- - if the proposal is refused:
+>>- - - set $x^{\left(n_{nt}\right)}=x^{\left(n\right)}$
+>>- - - slightly increase $n_{gd}$
+>>- - - slightly decrease $n_{rd}$
+>>- - otherwise, if $n=n_{ns}$:
+>>- - - decrease $\varepsilon_{rd}$
+>>- - - increase $n_{rd}$
+>>- - - decrease $n_{gd}$ 
+>>- - if a stopping condition is satisfied return
+>>- set $x^{\left(0\right)}=x^{\left(n_{nt}\right)}$
+>>
+>>In this way:
+>>- $\varepsilon_{gd}$ is always near enough to its most effective value.
+>>- $\varepsilon_{rd}$ is almost always large, so that the random descend can search for more advantageous areas in case getting stuck to a local minimum.
+>>- $\varepsilon_{rd}$ suddenly decays when the guess gets closer to a zero of the gradient, to prevent converging to a possible saddle point.
+>>- $n_{rd}<n_{gd}$ until a neighborhood of a zero of the gradient is reached.
+>>- $n_{gd}<n_{rd}$ when close to a zero of the gradient, so that the gradient descend is replaced by the more effective newton method and the random descend prevents convergence to saddle points.
+>>- The increase of $n_{rd}$ near to saddles allows $\varepsilon_{rd}$ to increase again during the iterations, balancing its decay.
+>
+>>### Content of the module
+>>
+>>The module contains a class naiveb.minimize.Minimize which is initialized with:
+>>- dim $=d$ such that $\phi:\mathbb R^d\rightarrow\mathbb R$
+>>- guess $=x^{\left(0\right)}$
+>>- func $=\phi\left(x\right)$
+>>- grad $=\nabla\phi\left(x\right)$
+>>- hess $=\nabla^2\phi\left(x\right)^{-1}$
+>>- constrain is equivalent to $\phi\left(x\right)<+\infty$
+>>- update is called at the end of the method \_\_call\_\_
+>>- grad_avail: is True when grad is initialized. If False, grad is inferred with the class Linear (in development)
+>>- hess_avail: is True when hess is initialized. If False, hess is inferred with the class Linear (in development)
+>>
+>>The methods of this class are:
+>>
+>>- compute: Takes no input. Just compute grad in guess. If grad is not initialized, then it inferres the gradient locally (in development)
+>>
+>>- attempt: Given a step $x^{\left(n\right)}-x^{\left(n+1\right)}$ checks if the proposal can be accepted, in case replace guess. If grad is not initialized, then it updates grad (in development). If hess is not initialized, then it updates hess (in development)
+>>
+>>- nt_step: Computes $x^{\left(n\right)}-x^{\left(n+1\right)}$ for the Newton method and calls attempt. If the proposal is refused tries to use the same step with opposite sign.
+>>
+>>- gd_step: Given $\varepsilon_{gd},\varepsilon_{rd}$ computes $x^{\left(n\right)}-x^{\left(n+1\right)}$ for the gradient descent and for the random descent, then calls attempt. If the proposal is refused tries to use the same step with opposite sign. The use of this method with both parameters different from zero has not been tested.
+>>
+>>- \_\_call\_\_: Given $n_{rd},n_{gd},n_{nt}, \varepsilon_{rd},\varepsilon_{rd}$ and a tollerance, repeat one cycle of the protocol described above, returns the number of accepted proposals and the number of the refused proposals so that the user can tune them at their taste (other hyperparameters will be available for further flexibility).
+>>
+>>- protocol: Given $n_{rd},n_{gd},n_{nt}, \varepsilon_{rd},\varepsilon_{rd}$ and a tollerance, repeatedly calls the method \_\_call\_\_ adjusting them at each iteration. It never stops until the stopping condition is satisfied and has no maximum number of iterations, so a limit has to be set as optional argument in the condition.
+>
+>## Inferring the gradient and the Hessian: naiveb.linear
+>
+>If only the gradient of $\phi$ is available, then the Hessian can be inferred as
+>
+>$\nabla^2\phi\left(y^{\left(n+1\right)}\right)^{-1}\left(\nabla\phi\left(x^{\left(n+1\right)}\right)-\nabla\phi\left(x^{\left(n\right)}\right)\right)=x^{\left(n+1\right)}-x^{\left(n\right)}$
+>
+>If the gradient is not available, it can be inferred by
+>
+>$\nabla\phi\left(y^{\left(n+1\right)}\right)\left(x^{\left(n+1\right)}-x^{\left(n\right)}\right)=\phi\left(x^{\left(n+1\right)}\right)-\phi\left(x^{\left(n\right)}\right).$
+>
+>While the Hessian (this is CHALLENGING: in development)
+>
+>>### Content of the module
+>>
+>>The module contains a class naiveb.linear.Linear which is initialized with:
+>>
+>>- (in development)
+>>
+>>The methods of this class are:
+>>
+>>- (in development)
