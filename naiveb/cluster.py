@@ -223,6 +223,8 @@ class Cluster:
       toll_theta: tollerance for the dual gap of the theta parameter
       toll_prior: tollerance for the dual gap of the omega parameter
 
+      we suggest setting small values to iter_nt and zero to iter_gd
+
     Output:
 
       prior: the omega parameter optimized by the minimizer protocol 

@@ -76,6 +76,7 @@ class Minimize:
       by default self.guess set to 0.
       constrain default returns True.
       the default for update is None.
+
       grad_avail: True if grad known.
       hess_avail: True if hess known.
 
