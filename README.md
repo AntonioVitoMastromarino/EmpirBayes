@@ -36,7 +36,7 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >>
 >>so that, if
 >>
->>${\mathbb P}\left(\theta\_i\left|x,\omega\right.\right)\coloneqq\frac{f\left(x,\theta\_i\right)\omega_i}{\sum_{j=1,\dots,n}f\left(x,\theta\_j\right)\omega\_j}
+>>${\mathbb P}\left(\theta\_i\left|x,\omega\right.\right)\coloneqq\frac{f\left(x,\theta\_i\right)\omega_i}{\sum_{j=1,\dots,n}f\left(x,\theta\_j\right)\omega\_j}$
 >>
 >>then
 >>
