@@ -4,7 +4,7 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 
 >## The model: naiveb.cluster
 >
->The likelihood in our problem is a mixture of a fixed number of 'conditional' likelihoods.
+>The likelihood in our problem is a mixture of a fixed number of _conditional_ likelihoods.
 >
 >$f\left(x,\theta,\omega\right)=\sum\_{i=1,\dots,n}\omega\_if\left(x,\theta\_i\right).$
 >
