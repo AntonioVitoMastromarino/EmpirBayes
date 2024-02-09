@@ -36,11 +36,11 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >>
 >>so that, if
 >>
->>${\mathbb P}\left(\theta\_i\left|x,\omega\right.\right)\coloneqq\frac{f\left(x,\theta\_i\right)\omega_i}{\sum_{j=1,\dots,n}f\left(x,\theta\_j\right)\omega\_j}$
+>>${\mathbb P}\left(\theta\_i\left|x,\omega\right.\right)\coloneqq\frac{\omega\_if\left(x,\theta\_i\right)}{\sum_{j=1,\dots,n}\omega\_jf\left(x,\theta\_j\right)}$
 >>
 >>then
 >>
->>$\frac{1}{\omega\_i}\left<\theta\_i\left|{\rm X},\omega\right.\right>\coloneqq\frac{1}{\omega\_i{\rm N}}\sum\_{k=1,\dots{\rm N}}{\mathbb P}\left(\theta\_i\left|{\rm X}\_k,\omega\right.\right)=\frac{1}{\omega\_i\rm N}\sum\_{k=1,\dots,{\rm N}}f\left(\theta\_i,{\rm X}\_k,\omega\right)=\frac{1}{\rm N}\frac{\partial\phi}{\partial\omega\_i}$
+>>$\frac{1}{\omega\_i}\left<\theta\_i\left|{\rm X},\omega\right.\right>\coloneqq\frac{1}{\omega\_i{\rm N}}\sum\_{k=1,\dots{\rm N}}{\mathbb P}\left(\theta\_i\left|{\rm X}\_k,\omega\right.\right)=\frac{1}{\rm N}\frac{\partial\phi}{\partial\omega\_i}$
 >>
 >>so that if $f\left(\theta\_i,{\rm X},\omega\right)=\omega\_i$, then the gradient of $\phi$ is parallel to the constrain $\sum\_{i=1,\dots,n}\omega\_i=1$. Then we can obtain a maximum likelihood estimator recursively applying $\omega\_i^{\left(n+1\right)}=f\left(\theta\_i,{\rm X},\omega^{\left(n\right)}\right)$. The actual convergence of this method to a maximum likelihood estimator has to be, mathematically speaking, further investigated.
 >
