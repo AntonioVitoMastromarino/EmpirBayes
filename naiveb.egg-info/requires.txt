@@ -1,8 +1,0 @@
-numpy
-matplotlib
-pandas
-scipy
-
-[docs]
-sphinx
-sphinx_rtd_theme
