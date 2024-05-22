@@ -1,8 +1,8 @@
-# NaiveB
+# EmpirBayes
 
 This class attempts to apply quasi-Newton method to a maximum likelihood problem where the likelihood is a weighted mixture.
 
->## The model: naiveb.cluster
+>## The model: empirbayes.cluster
 >
 >The likelihood in our problem is a mixture of a fixed number of _conditional_ likelihoods.
 >
@@ -46,7 +46,7 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >
 >>### Content of the module
 >>
->>The module contains a class naiveb.cluster.Cluster which is initialized with:
+>>The module contains a class empirbayes.cluster.Cluster which is initialized with:
 >>- num $=n$.
 >>- dim $=d$ such that $\theta\in{\mathbb R}^d$.
 >>- func $=f:\mathcal X\times{\mathbb R}^d\rightarrow\left[0,\infty\right)$ such that $\mathrm X\_k:\Omega\rightarrow{\cal X}$.
@@ -65,11 +65,11 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >>
 >>- inv\_hess: Computes the inverse matrix of $\frac{\partial^2\phi}{\partial\theta^2}$ from a sample $\{{\rm X}\_k:k=1,\dots,{\rm N}\}$.
 >>
->>- calibrator: Given a sample $\{{\rm X}\_k:k=1,\dots,{\rm N}\}$ return an object of the class naiveb.minimize.Minimize, when called this object tries to optimize $\theta$ eventually updating the weights.
+>>- calibrator: Given a sample $\{{\rm X}\_k:k=1,\dots,{\rm N}\}$ return an object of the class empirbayes.minimize.Minimize, when called this object tries to optimize $\theta$ eventually updating the weights.
 >>
 >>- \_\_call\_\_: Given the hyperparameters necessary to the minimization protocol described below, runs the protocol. At each iteration of the protocol $\theta$ is optimized, then, if $\left|\partial\phi\right|$ is smaller that a tollerance, the parameter $\omega$ is updated. If the gap $\left|\omega^{\left(n+1\right)}-\omega^{\left(n\right)}\right|$ is smaller than a tollerance, then condition is satisfied and the protocol returns.
 
->## Optimization problems: naiveb.minimize
+>## Optimization problems: empirbayes.minimize
 >
 >>### Random descent
 >>
@@ -150,7 +150,7 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >
 >>### Content of the module
 >>
->>The module contains a class naiveb.minimize.Minimize which is initialized with:
+>>The module contains a class empirbayes.minimize.Minimize which is initialized with:
 >>- dim $=d$ such that $\phi:\mathbb R^d\rightarrow\mathbb R$.
 >>- guess $=x^{\left(0\right)}$.
 >>- func $=\phi\left(x\right)$.
@@ -175,7 +175,7 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >>
 >>- protocol: Given $n\_{rd},n\_{gd},n\_{nt}, \varepsilon\_{rd},\varepsilon\_{rd}$ and a tollerance, repeatedly calls the method \_\_call\_\_ adjusting them at each iteration. It never stops until the stopping condition is satisfied and has no maximum number of iterations, so a limit has to be set as optional argument in the condition.
 >
->## Inferring the gradient and the Hessian: naiveb.linear
+>## Inferring the gradient and the Hessian: empirbayes.linear
 >
 >If only the gradient of $\phi$ is available, then the Hessian can be inferred as
 >
@@ -189,7 +189,7 @@ This class attempts to apply quasi-Newton method to a maximum likelihood problem
 >
 >>### Content of the module
 >>
->>The module contains a class naiveb.linear.Linear which is initialized with:
+>>The module contains a class empirbayes.linear.Linear which is initialized with:
 >>
 >>- (in development)
 >>
