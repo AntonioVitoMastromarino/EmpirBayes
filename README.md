@@ -1,6 +1,6 @@
 # EmpirBayes
 
-This class attempts to apply quasi-Newton method to a maximum likelihood problem where the likelihood is a weighted mixture.
+This class attempts to apply quasi-Newton method to a maximum likelihood problem where the likelihood is a weighted mixture. See also [http://www.jstor.org/stable/43908598]
 
 >## The model: empirbayes.cluster
 >
